@@ -265,23 +265,26 @@
       </p>
 
       <div class="customize">
-        <strong>Para personalizar:</strong> altere o título, textos e cores diretamente neste arquivo. A meta fica na constante <code>GOAL</code> no JavaScript abaixo.
+        <strong>Para personalizar:</strong> altere o título, textos e cores diretamente neste arquivo. A meta fica na constante <code>GOAL</code> no JavaScript.
       </div>
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ================================
-    // PERSONALIZE AQUI
+    // CONFIGURAÇÃO
     // ================================
     const GOAL = 1000;
-    const STORAGE_KEY = 'ejc-tercos-total';
 
-    // Esta versão salva o total apenas neste navegador/dispositivo.
-    // Para um contador compartilhado entre várias pessoas, será preciso
-    // conectar o site a um banco online (ex.: Supabase ou Firebase).
+    // Dados públicos do seu projeto Supabase.
+    // A publishable key pode ficar no código do navegador.
+    const SUPABASE_URL = 'https://fkrkabhmhhmpjtoiynde.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_RLHmxqNIV9ZT-o0ZG0D-3Q_F8vzgbaF';
 
-    let total = Number(localStorage.getItem(STORAGE_KEY)) || 0;
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let total = 0;
 
     const prayedEl = document.getElementById('prayed');
     const goalEl = document.getElementById('goal');
@@ -307,7 +310,28 @@
       }
     }
 
-    function addRosaries() {
+    async function loadTotal() {
+      message.textContent = 'Atualizando contador...';
+
+      const { data, error } = await db
+        .from('Terços')
+        .select('quantidade');
+
+      if (error) {
+        console.error(error);
+        message.textContent = 'Não foi possível atualizar o contador. Tente recarregar a página.';
+        return;
+      }
+
+      total = (data || []).reduce((sum, row) => sum + Number(row.quantidade || 0), 0);
+      updateScreen();
+
+      if (total < GOAL) {
+        message.textContent = '';
+      }
+    }
+
+    async function addRosaries() {
       const amount = Number(amountInput.value);
 
       if (!Number.isInteger(amount) || amount < 1) {
@@ -315,23 +339,45 @@
         return;
       }
 
-      total += amount;
-      localStorage.setItem(STORAGE_KEY, total);
-      updateScreen();
+      addButton.disabled = true;
+      addButton.textContent = 'Registrando...';
+      message.textContent = '';
+
+      const { error } = await db
+        .from('Terços')
+        .insert([{ quantidade: amount }]);
+
+      if (error) {
+        console.error(error);
+        message.textContent = 'Não foi possível registrar agora. Tente novamente.';
+        addButton.disabled = false;
+        addButton.textContent = 'Registrar terço 🙏';
+        return;
+      }
+
+      amountInput.value = 1;
+
+      await loadTotal();
 
       message.textContent = amount === 1
         ? 'Terço registrado! Nossa Senhora interceda pelo EJC. 🙏'
         : `${amount} terços registrados! Nossa Senhora interceda pelo EJC. 🙏`;
 
-      amountInput.value = 1;
+      addButton.disabled = false;
+      addButton.textContent = 'Registrar terço 🙏';
     }
 
     addButton.addEventListener('click', addRosaries);
+
     amountInput.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') addRosaries();
     });
 
-    updateScreen();
+    loadTotal();
+
+    // Atualiza o contador automaticamente a cada 15 segundos,
+    // para acompanhar registros feitos por outras pessoas.
+    setInterval(loadTotal, 15000);
   </script>
 </body>
 </html>
