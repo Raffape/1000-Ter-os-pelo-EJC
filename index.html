@@ -315,7 +315,7 @@
 
       const { data, error } = await db
         .from('Terços')
-        .select('quantidade');
+        .select('Quantidade');
 
       if (error) {
         console.error(error);
@@ -323,7 +323,7 @@
         return;
       }
 
-      total = (data || []).reduce((sum, row) => sum + Number(row.quantidade || 0), 0);
+      total = (data || []).reduce((sum, row) => sum + Number(row.Quantidade || 0), 0);
       updateScreen();
 
       if (total < GOAL) {
@@ -345,7 +345,7 @@
 
       const { error } = await db
         .from('Terços')
-        .insert([{ quantidade: amount }]);
+        .insert([{ Quantidade: amount }]);
 
       if (error) {
         console.error(error);
