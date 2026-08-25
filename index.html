@@ -338,7 +338,13 @@
         message.textContent = 'Digite uma quantidade válida.';
         return;
       }
+const confirmar = window.confirm(
+  `Você confirma o registro de ${amount} ${amount === 1 ? 'terço' : 'terços'}?`
+);
 
+if (!confirmar) {
+  return;
+}
       addButton.disabled = true;
       addButton.textContent = 'Registrando...';
       message.textContent = '';
