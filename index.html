@@ -6,271 +6,484 @@
   <title>1000 Terços pelo EJC</title>
   <meta name="description" content="Contador comunitário de terços em intenção do EJC." />
   <style>
-    :root {
-      --bg: #f6f8fb;
-      --card: #ffffff;
-      --primary: #355c8a;
-      --primary-dark: #274768;
-      --accent: #d8e6f5;
-      --text: #1f2d3d;
-      --muted: #6b7b8c;
-      --success: #2f7d5a;
-      --radius: 22px;
-      --shadow: 0 12px 32px rgba(38, 57, 77, 0.10);
+    :root{
+      --vinho:#820018;
+      --vinho-escuro:#5c0011;
+      --vinho-claro:#a51f39;
+      --rosa:#ead5da;
+      --rosa-claro:#f7edef;
+      --branco:#fffdfd;
+      --texto:#2c2527;
+      --muted:#71666a;
+      --verde:#2f7d5a;
+      --sombra:0 12px 32px rgba(92,0,17,.12);
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 45%, #ffffff 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+    html{background:#f6eff1}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--texto);
+      background:
+        radial-gradient(circle at 10% 7%, rgba(130,0,24,.06), transparent 25%),
+        linear-gradient(180deg,#fbf6f7 0%,#f7edef 58%,#fff 100%);
     }
 
-    .wrap {
-      width: 100%;
-      max-width: 720px;
+    .page{
+      min-height:100vh;
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
     }
 
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px;
-      border: 1px solid rgba(53, 92, 138, 0.08);
+    .page::before,
+    .page::after{
+      content:"";
+      position:fixed;
+      z-index:-2;
+      pointer-events:none;
+      background:url('logo-ejc.jpeg') center/contain no-repeat;
+      opacity:.055;
+      filter:grayscale(1) sepia(.25) saturate(2.6) hue-rotate(300deg);
     }
 
-    .eyebrow {
-      text-align: center;
-      color: var(--primary);
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-size: .78rem;
-      margin-bottom: 10px;
+    .page::before{
+      width:min(920px,95vw);
+      height:min(920px,95vw);
+      right:-260px;
+      top:-120px;
     }
 
-    h1 {
-      text-align: center;
-      margin: 0;
-      font-size: clamp(2rem, 6vw, 3.6rem);
-      line-height: 1.05;
-      color: var(--primary-dark);
+    .page::after{
+      width:min(860px,92vw);
+      height:min(860px,92vw);
+      left:-390px;
+      top:290px;
+      opacity:.035;
     }
 
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin: 12px auto 24px;
-      max-width: 540px;
-      line-height: 1.6;
+    .wrap{
+      width:min(100%,860px);
+      margin:0 auto;
+      padding:42px 18px 0;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 24px 0;
+    .brand{
+      display:flex;
+      justify-content:center;
+      margin-bottom:24px;
     }
 
-    .stat {
-      background: #f8fbff;
-      border: 1px solid var(--accent);
-      border-radius: 16px;
-      padding: 18px 12px;
-      text-align: center;
+    .logo-ejc{
+      width:190px;
+      height:190px;
+      border-radius:50%;
+      object-fit:cover;
+      border:6px solid #fff;
+      box-shadow:0 12px 35px rgba(92,0,17,.18);
+      background:var(--vinho);
     }
 
-    .stat strong {
-      display: block;
-      font-size: clamp(1.35rem, 4vw, 2rem);
-      color: var(--primary-dark);
-      margin-bottom: 6px;
+    .hero{
+      text-align:center;
+      margin-bottom:28px;
     }
 
-    .stat span {
-      font-size: .82rem;
-      color: var(--muted);
+    .title-top{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-weight:500;
+      color:var(--vinho);
+      font-size:clamp(3rem,8vw,5.8rem);
+      line-height:.9;
+      letter-spacing:.01em;
     }
 
-    .progress-shell {
-      background: #e7eef6;
-      border-radius: 999px;
-      height: 18px;
-      overflow: hidden;
-      margin: 10px 0 8px;
+    .title-bottom{
+      margin:2px 0 0;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:16px;
+      color:var(--vinho);
+      line-height:.9;
     }
 
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--primary), #7ca6d8);
-      border-radius: inherit;
-      transition: width .35s ease;
+    .pelo{
+      font-family:"Brush Script MT","Segoe Script",cursive;
+      font-size:clamp(3rem,8vw,5rem);
+      font-style:italic;
+      font-weight:400;
+      transform:translateY(7px);
+      color:var(--vinho-escuro);
     }
 
-    .progress-text {
-      text-align: right;
-      color: var(--muted);
-      font-size: .9rem;
-      margin-bottom: 26px;
+    .ejc{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(3.4rem,8vw,5.6rem);
+      font-weight:500;
+      color:var(--vinho);
     }
 
-    .form-box {
-      background: #f8fbff;
-      border: 1px solid var(--accent);
-      border-radius: 18px;
-      padding: 20px;
+    .ornament{
+      width:440px;
+      max-width:76vw;
+      height:18px;
+      margin:12px auto 22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      color:var(--vinho);
     }
 
-    .form-box h2 {
-      margin: 0 0 6px;
-      font-size: 1.2rem;
-      color: var(--primary-dark);
+    .ornament::before,.ornament::after{
+      content:"";
+      height:2px;
+      background:var(--vinho);
+      flex:1;
+      border-radius:99px;
     }
 
-    .form-box p {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: .95rem;
+    .ornament span{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.35rem;
+      font-weight:700;
     }
 
-    .controls {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: end;
+    .subtitle{
+      max-width:680px;
+      margin:0 auto;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(1.08rem,2.4vw,1.38rem);
+      line-height:1.45;
+      color:#342b2e;
     }
 
-    label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 8px;
-      font-size: .92rem;
+    .stats{
+      margin:34px auto 18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
     }
 
-    input[type="number"] {
-      width: 100%;
-      border: 1px solid #c7d5e5;
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 1rem;
-      outline: none;
+    .stat{
+      min-height:165px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(130,0,24,.08);
+      border-radius:18px;
+      box-shadow:var(--sombra);
+      padding:20px 14px;
+      backdrop-filter:blur(3px);
     }
 
-    input[type="number"]:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(53, 92, 138, .12);
+    .stat-icon{
+      color:var(--vinho);
+      font-size:2rem;
+      line-height:1;
+      margin-bottom:6px;
     }
 
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 14px 18px;
-      background: var(--primary);
-      color: white;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      min-width: 170px;
+    .stat strong{
+      display:block;
+      font-family:Georgia,"Times New Roman",serif;
+      color:var(--vinho);
+      font-weight:500;
+      font-size:clamp(2rem,5vw,3.2rem);
+      line-height:1;
+      margin-bottom:11px;
     }
 
-    button:hover { background: var(--primary-dark); }
-
-    .message {
-      min-height: 22px;
-      margin-top: 12px;
-      color: var(--success);
-      font-weight: 700;
-      font-size: .92rem;
+    .stat span:last-child{
+      font-size:.82rem;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:#2d2729;
     }
 
-    .note {
-      margin-top: 22px;
-      color: var(--muted);
-      font-size: .84rem;
-      line-height: 1.5;
-      text-align: center;
+    .panel{
+      background:rgba(255,255,255,.90);
+      border:1px solid rgba(130,0,24,.08);
+      border-radius:18px;
+      box-shadow:var(--sombra);
+      backdrop-filter:blur(3px);
     }
 
-    .customize {
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px dashed #d5dee8;
-      font-size: .8rem;
-      color: var(--muted);
-      line-height: 1.5;
+    .progress-card{
+      padding:22px 28px 18px;
+      margin:18px 0;
     }
 
-    @media (max-width: 620px) {
-      .stats { grid-template-columns: 1fr; }
-      .controls { grid-template-columns: 1fr; }
-      button { width: 100%; }
-      .card { padding: 22px; }
+    .panel-title{
+      text-align:center;
+      color:var(--vinho);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-weight:900;
+      font-size:1rem;
+      margin-bottom:16px;
+    }
+
+    .progress-shell{
+      height:16px;
+      background:#e5d2d7;
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:10px;
+    }
+
+    .progress-bar{
+      height:100%;
+      width:0%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--vinho),var(--vinho-claro));
+      transition:width .35s ease;
+    }
+
+    .progress-text{
+      text-align:center;
+      color:var(--vinho);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.18rem;
+      font-weight:700;
+    }
+
+    .form-box{
+      padding:24px 28px 26px;
+      margin-bottom:0;
+    }
+
+    .form-box h2{
+      margin:0 0 18px;
+      text-align:center;
+      font-family:Georgia,"Times New Roman",serif;
+      color:var(--vinho);
+      text-transform:uppercase;
+      letter-spacing:.035em;
+      font-size:1.35rem;
+      font-weight:600;
+    }
+
+    .form-box h2::before{
+      content:"◌";
+      margin-right:9px;
+      color:var(--vinho);
+    }
+
+    .form-box > p{
+      display:none;
+    }
+
+    .controls{
+      display:block;
+      max-width:590px;
+      margin:0 auto;
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      font-size:.94rem;
+      margin-bottom:8px;
+      color:#2d2729;
+    }
+
+    input[type="number"]{
+      width:100%;
+      border:1.5px solid var(--vinho);
+      background:#fff;
+      border-radius:10px;
+      padding:15px 16px;
+      font-size:1.05rem;
+      outline:none;
+      margin-bottom:12px;
+    }
+
+    input[type="number"]:focus{
+      box-shadow:0 0 0 3px rgba(130,0,24,.10);
+    }
+
+    button{
+      width:100%;
+      border:0;
+      border-radius:9px;
+      padding:15px 18px;
+      background:linear-gradient(90deg,#9a001e 0%,var(--vinho) 58%,#700014 100%);
+      color:#fff;
+      font-size:1.02rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(92,0,17,.16);
+    }
+
+    button:hover{filter:brightness(.97)}
+    button:disabled{opacity:.65;cursor:wait}
+
+    .message{
+      min-height:22px;
+      margin-top:12px;
+      text-align:center;
+      color:var(--verde);
+      font-weight:700;
+      font-size:.92rem;
+    }
+
+    .spiritual-note{
+      margin:12px auto 0;
+      max-width:520px;
+      text-align:center;
+      line-height:1.45;
+      color:#3b3436;
+      font-size:.9rem;
+    }
+
+    .spiritual-note::before{
+      content:"✧";
+      color:var(--vinho);
+      margin-right:7px;
+      font-size:1.1rem;
+    }
+
+    .footer{
+      margin-top:28px;
+      min-height:170px;
+      background:
+        radial-gradient(circle at 40% 0%,rgba(255,255,255,.08),transparent 35%),
+        linear-gradient(135deg,#710014 0%,#9b001f 52%,#690010 100%);
+      border-radius:54% 54% 0 0 / 32px 32px 0 0;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:46px 20px 34px;
+      box-shadow:0 -8px 26px rgba(92,0,17,.10);
+    }
+
+    .quote{
+      font-family:Georgia,"Times New Roman",serif;
+      font-style:italic;
+      font-size:clamp(1.35rem,3vw,1.8rem);
+      margin-bottom:9px;
+    }
+
+    .quote::before,.quote::after{
+      color:#d9a9b4;
+      font-size:2.2rem;
+      vertical-align:-.2em;
+    }
+
+    .quote::before{content:"“";margin-right:7px}
+    .quote::after{content:"”";margin-left:7px}
+
+    .ref{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1rem;
+      opacity:.95;
+    }
+
+    @media(max-width:700px){
+      .wrap{padding-top:24px}
+      .logo-ejc{width:145px;height:145px}
+      .stats{gap:10px}
+      .stat{min-height:140px;padding:16px 9px}
+      .stat span:last-child{font-size:.68rem}
+      .progress-card,.form-box{padding-left:18px;padding-right:18px}
+    }
+
+    @media(max-width:480px){
+      .title-bottom{gap:8px}
+      .stats{grid-template-columns:1fr}
+      .stat{min-height:126px}
+      .footer{margin-left:-18px;margin-right:-18px}
+      .page::before{right:-360px;top:-60px}
+      .page::after{left:-430px;top:430px}
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="card">
-      <div class="eyebrow">EJC • Liturgia</div>
-      <h1>🙏 1000 Terços pelo EJC</h1>
-      <p class="subtitle">
-        Uma corrente de oração pelo nosso encontro. Cada terço rezado nos aproxima da meta e coloca o EJC nas mãos de Nossa Senhora.
-      </p>
+  <div class="page">
+    <main class="wrap">
 
-      <div class="stats">
+      <div class="brand">
+        <img src="logo-ejc.jpeg" alt="Logo do EJC" class="logo-ejc">
+      </div>
+
+      <section class="hero">
+        <h1 class="title-top">1000 TERÇOS</h1>
+        <div class="title-bottom">
+          <span class="pelo">pelo</span>
+          <span class="ejc">EJC</span>
+        </div>
+        <div class="ornament"><span>✝</span></div>
+        <p class="subtitle">Uma corrente de oração pelo nosso encontro.</p>
+      </section>
+
+      <section class="stats">
         <div class="stat">
+          <span class="stat-icon">◌</span>
           <strong id="prayed">0</strong>
           <span>terços rezados</span>
         </div>
         <div class="stat">
+          <span class="stat-icon">◎</span>
           <strong id="goal">1000</strong>
           <span>meta</span>
         </div>
         <div class="stat">
+          <span class="stat-icon">♱</span>
           <strong id="remaining">1000</strong>
           <span>ainda faltam</span>
         </div>
-      </div>
+      </section>
 
-      <div class="progress-shell" aria-label="Progresso da meta">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-      <div class="progress-text" id="progressText">0% concluído</div>
+      <section class="panel progress-card">
+        <div class="panel-title">Progresso da oração</div>
+        <div class="progress-shell" aria-label="Progresso da meta">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">0% concluído</div>
+      </section>
 
-      <div class="form-box">
+      <section class="panel form-box">
         <h2>Registrar oração</h2>
         <p>Informe quantos terços você acabou de rezar.</p>
 
         <div class="controls">
           <div>
-            <label for="amount">Quantidade</label>
-            <input id="amount" type="number" min="1" step="1" value="1" />
+            <label for="amount">Quantidade de terços</label>
+            <input id="amount" type="number" min="1" step="1" value="1">
           </div>
           <button id="addButton" type="button">Registrar terço 🙏</button>
         </div>
 
         <div class="message" id="message" aria-live="polite"></div>
-      </div>
 
-      <p class="note">
-        “Perseverai na oração.” — Cl 4,2
-      </p>
+        <p class="spiritual-note">
+          Cada terço registrado é uma flor espiritual oferecida pelo nosso encontro.
+        </p>
+      </section>
 
-      <div class="customize">
-        <strong>Para personalizar:</strong> altere o título, textos e cores diretamente neste arquivo. A meta fica na constante <code>GOAL</code> no JavaScript.
-      </div>
-    </section>
-  </main>
+      <footer class="footer">
+        <div class="quote">Perseverai na oração.</div>
+        <div class="ref">— Cl 4,2</div>
+      </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </main>
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ================================
     // CONFIGURAÇÃO
